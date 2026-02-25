@@ -1,0 +1,204 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-dark-300 text-white transition-colors duration-300;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-primary-500 hover:bg-primary-600 text-white font-semibold py-2 px-6 rounded-full transition-all duration-200 transform hover:scale-105;
+  }
+
+  .btn-secondary {
+    @apply bg-dark-100 hover:bg-dark-200 text-white font-semibold py-2 px-6 rounded-full transition-colors duration-200;
+  }
+
+  .card {
+    @apply bg-dark-200 rounded-lg p-4 hover:bg-dark-100 transition-colors duration-200;
+  }
+
+  .input {
+    @apply w-full bg-dark-100 border border-gray-700 rounded-md px-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-primary-500 transition-colors;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #121212;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #282828;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3e3e3e;
+}
+
+/* Light Theme */
+html.light {
+  color-scheme: light;
+}
+
+html.light body {
+  @apply bg-gray-50 text-gray-900;
+}
+
+html.light .bg-dark-400 {
+  @apply bg-white border-r border-gray-200 shadow-sm;
+}
+
+html.light .bg-dark-300 {
+  @apply bg-gray-100;
+}
+
+html.light .bg-dark-200 {
+  @apply bg-white border border-gray-200 shadow-sm;
+}
+
+html.light .bg-dark-100 {
+  @apply bg-gray-50 border-gray-300;
+}
+
+html.light .text-white {
+  @apply text-gray-900;
+}
+
+html.light .text-gray-400 {
+  @apply text-gray-600;
+}
+
+html.light .text-gray-300 {
+  @apply text-gray-700;
+}
+
+html.light .text-gray-500 {
+  @apply text-gray-600;
+}
+
+html.light .border-gray-800 {
+  @apply border-gray-200;
+}
+
+html.light .border-gray-700 {
+  @apply border-gray-300;
+}
+
+html.light .border-gray-600 {
+  @apply border-gray-300;
+}
+
+html.light .hover\:bg-dark-200:hover {
+  @apply bg-gray-100;
+}
+
+html.light .hover\:bg-dark-100:hover {
+  @apply bg-gray-50;
+}
+
+html.light .hover\:bg-dark-300:hover {
+  @apply bg-gray-200;
+}
+
+html.light .input {
+  @apply bg-white border-gray-300 text-gray-900 placeholder-gray-500 focus:border-primary-500;
+}
+
+html.light .card {
+  @apply bg-white border border-gray-200 shadow-sm hover:shadow-md;
+}
+
+html.light .btn-secondary {
+  @apply bg-gray-200 hover:bg-gray-300 text-gray-900;
+}
+
+html.light ::-webkit-scrollbar-track {
+  background: #f3f4f6;
+}
+
+html.light ::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+}
+
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Auth page specific light theme styles */
+html.light .auth-bg-gradient {
+  background: linear-gradient(to bottom, #f9fafb, #ffffff, #f3f4f6);
+}
+
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 2s ease-in-out infinite;
+}
+
+/* Focus styles for better accessibility */
+.focus-visible:focus {
+  @apply outline-none ring-2 ring-primary-500 ring-offset-2;
+}
+
+html.light .focus-visible:focus {
+  @apply ring-offset-white;
+}
+
+/* Custom gradient backgrounds for auth pages */
+.auth-gradient-dark {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.auth-gradient-light {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+html.light .auth-gradient-dark {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+/* Enhanced button styles */
+.btn-gradient {
+  @apply bg-gradient-to-r from-primary-500 to-purple-600 hover:from-primary-600 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg;
+}
+
+html.light .btn-gradient {
+  @apply shadow-md hover:shadow-lg;
+}
+
+/* Loading spinner */
+.spinner {
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #3498db;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

@@ -1,0 +1,89 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+*.env
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Testing
+coverage/
+.nyc_output/
+
+# Misc
+*.pem
+.vercel
+
+# Documentation files (exclude from Git)
+*.md
+!README.md
+# Exclude all documentation
+BACKEND_COMPLETE.md
+CHECKLIST.md
+COMMANDS.md
+CONFIGURE_EMAIL_STEP_BY_STEP.md
+CURRENT_STATUS.md
+EMAIL_SETUP_GUIDE.md
+FEATURES_IMPLEMENTED.md
+FINAL_FEATURE_AUDIT.md
+FINAL_FIX.md
+FIND_OTP_IN_CONSOLE.md
+FIX_AND_RUN.md
+FIXES_APPLIED.md
+GIT_PUSH_COMMANDS.md
+GMAIL_SETUP_INSTRUCTIONS.md
+LOGIN_OTP_COMPLETE.md
+MANUAL_FIX.md
+NEW_FEATURES_SUMMARY.md
+OTP_VERIFICATION_GUIDE.md
+PASSWORDLESS_LOGIN_IMPLEMENTED.md
+PROJECT_BLUEPRINT.md
+PROJECT_SUMMARY.md
+QUICK_REFERENCE.md
+QUICK_START.md
+SEND_REAL_EMAILS_NOW.md
+SETUP_GMAIL_NOW.md
+SETUP_GUIDE.md
+SETUP_NOW.md
+SETUP_REAL_EMAIL_NOW.md
+START_HERE.md
+START_USING_NEW_FEATURES.md
+TEMPORARY_BYPASS_OTP.md
+TEST_LOGIN_OTP_NOW.md
+TROUBLESHOOTING.md
+VISUAL_GUIDE.md
+FEATURE_IMPLEMENTATION_PLAN.md
+IMPLEMENTATION_COMPLETE.md
+IMPLEMENTATION_PROGRESS.md
+README_FIRST.md
+
+# Helper scripts (optional - uncomment to exclude)
+# backend/verify-email-manually.js
+# backend/disable-otp-temporarily.js
+# backend/test-email.js
