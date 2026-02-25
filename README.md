@@ -226,5 +226,5 @@ Project Link: [https://github.com/yourusername/music-streaming-platform](https:/
 
 ---
 
-Built with ❤️ for developers by developers
+Built with ❤️ for developers by me
 # Music-Stream
