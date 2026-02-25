@@ -40,10 +40,21 @@ coverage/
 *.pem
 .vercel
 
+# Docker files
+Dockerfile
+docker-compose.yml
+backend/Dockerfile
+frontend/Dockerfile
+
+# PowerShell scripts
+*.ps1
+start-dev.ps1
+
 # Documentation files (exclude from Git)
 *.md
 !README.md
-# Exclude all documentation
+!GMAIL_SETUP_INSTRUCTIONS.md
+# Exclude all other documentation
 BACKEND_COMPLETE.md
 CHECKLIST.md
 COMMANDS.md
@@ -57,7 +68,6 @@ FIND_OTP_IN_CONSOLE.md
 FIX_AND_RUN.md
 FIXES_APPLIED.md
 GIT_PUSH_COMMANDS.md
-GMAIL_SETUP_INSTRUCTIONS.md
 LOGIN_OTP_COMPLETE.md
 MANUAL_FIX.md
 NEW_FEATURES_SUMMARY.md
