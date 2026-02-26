@@ -220,7 +220,8 @@ This project demonstrates:
 
 ## 📧 Contact
 
-Your Name - your.email@example.com
+Your Name - thotayogatejaswi1@gmail.com
+
 
 Project Link: [https://github.com/yourusername/music-streaming-platform](https://github.com/yourusername/music-streaming-platform)
 

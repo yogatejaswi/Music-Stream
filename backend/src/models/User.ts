@@ -67,7 +67,10 @@ const userSchema = new Schema<IUser>({
   },
   password: {
     type: String,
-    required: [true, 'Password is required'],
+    required: function(this: IUser) {
+      // Password is required only if no OAuth provider is set
+      return !this.oauth?.google?.id && !this.oauth?.facebook?.id && !this.oauth?.twitter?.id && !this.oauth?.github?.id;
+    },
     minlength: [6, 'Password must be at least 6 characters'],
     select: false
   },
@@ -92,22 +95,25 @@ const userSchema = new Schema<IUser>({
     default: ''
   },
   oauth: {
-    google: {
-      id: String,
-      email: String
+    type: {
+      google: {
+        id: { type: String },
+        email: { type: String }
+      },
+      facebook: {
+        id: { type: String },
+        email: { type: String }
+      },
+      twitter: {
+        id: { type: String },
+        email: { type: String }
+      },
+      github: {
+        id: { type: String },
+        email: { type: String }
+      }
     },
-    facebook: {
-      id: String,
-      email: String
-    },
-    twitter: {
-      id: String,
-      email: String
-    },
-    github: {
-      id: String,
-      email: String
-    }
+    default: {}
   },
   role: {
     type: String,
@@ -194,6 +200,9 @@ const userSchema = new Schema<IUser>({
 // Hash password before saving
 userSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();
+  
+  // Skip hashing if password is not set (OAuth users)
+  if (!this.password) return next();
   
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);

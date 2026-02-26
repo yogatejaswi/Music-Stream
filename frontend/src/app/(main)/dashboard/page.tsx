@@ -48,16 +48,16 @@ export default function DashboardPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <div className="text-xl">Loading...</div>
+        <div className="text-xl text-white">Loading...</div>
       </div>
     );
   }
 
   return (
-    <div className="p-6 space-y-8">
+    <div className="p-6 space-y-8 min-h-screen bg-dark-300">
       {/* Browse Genres */}
       <section>
-        <h2 className="text-2xl font-bold mb-4">Browse by Genre</h2>
+        <h2 className="text-2xl font-bold mb-4 text-white">Browse by Genre</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {genres.map((genre) => (
             <Link
@@ -73,16 +73,22 @@ export default function DashboardPage() {
 
       {trendingSongs.length === 0 && recentSongs.length === 0 && recommendations.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-96 text-center">
-          <h2 className="text-3xl font-bold mb-4">No Songs Yet</h2>
+          <h2 className="text-3xl font-bold mb-4 text-white">No Songs Yet</h2>
           <p className="text-gray-400 mb-6">
             Upload your first song from the Admin dashboard to get started!
           </p>
+          <Link 
+            href="/admin" 
+            className="bg-primary-500 hover:bg-primary-600 text-white px-6 py-3 rounded-lg font-semibold transition"
+          >
+            Go to Admin Dashboard
+          </Link>
         </div>
       ) : (
         <>
           {trendingSongs.length > 0 && (
             <section>
-              <h2 className="text-2xl font-bold mb-4">Trending Now</h2>
+              <h2 className="text-2xl font-bold mb-4 text-white">Trending Now</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 {trendingSongs.map((song: any, index: number) => (
                   <SongCard key={song._id} song={song} allSongs={trendingSongs} songIndex={index} />
@@ -93,7 +99,7 @@ export default function DashboardPage() {
 
           {recentSongs.length > 0 && (
             <section>
-              <h2 className="text-2xl font-bold mb-4">Recently Added</h2>
+              <h2 className="text-2xl font-bold mb-4 text-white">Recently Added</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 {recentSongs.map((song: any, index: number) => (
                   <SongCard key={song._id} song={song} allSongs={recentSongs} songIndex={index} />
@@ -104,7 +110,7 @@ export default function DashboardPage() {
 
           {recommendations.length > 0 && (
             <section>
-              <h2 className="text-2xl font-bold mb-4">Recommended for You</h2>
+              <h2 className="text-2xl font-bold mb-4 text-white">Recommended for You</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 {recommendations.map((song: any, index: number) => (
                   <SongCard key={song._id} song={song} allSongs={recommendations} songIndex={index} />

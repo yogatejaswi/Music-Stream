@@ -5,6 +5,7 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import morgan from 'morgan';
 import dotenv from 'dotenv';
+import passport from './config/passport';
 
 import { connectDatabase } from './config/database';
 import { errorMiddleware } from './middleware/error.middleware';
@@ -20,6 +21,8 @@ import albumRoutes from './routes/album.routes';
 import commentRoutes from './routes/comment.routes';
 import socialRoutes from './routes/social.routes';
 import analyticsRoutes from './routes/analytics.routes';
+import lyricsRoutes from './routes/lyrics.routes';
+// import podcastRoutes from './routes/podcast.routes';
 
 dotenv.config();
 
@@ -40,6 +43,9 @@ app.use(cors({
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
+
+// Passport middleware
+app.use(passport.initialize());
 
 // Compression middleware
 app.use(compression());
@@ -67,6 +73,8 @@ app.use('/api/albums', albumRoutes);
 app.use('/api/comments', commentRoutes);
 app.use('/api/social', socialRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/lyrics', lyricsRoutes);
+// app.use('/api/podcasts', podcastRoutes);
 
 // Error handling middleware (must be last)
 app.use(errorMiddleware);

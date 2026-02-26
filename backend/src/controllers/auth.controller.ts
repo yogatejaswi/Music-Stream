@@ -4,6 +4,7 @@ import { asyncHandler, AppError } from '../middleware/error.middleware';
 import { generateAccessToken, generateRefreshToken, setTokenCookies, clearTokenCookies } from '../utils/jwt.utils';
 import { AuthRequest } from '../middleware/auth.middleware';
 import { generateOTP, sendOTPEmail, sendWelcomeEmail, sendLoginOTPEmail } from '../services/email.service';
+import passport from '../config/passport';
 
 // @desc    Register new user (Step 1: Send OTP)
 // @route   POST /api/auth/register
@@ -296,4 +297,33 @@ export const refreshToken = asyncHandler(async (req: Request, res: Response) => 
     success: true,
     message: 'Token refreshed successfully'
   });
+});
+
+// @desc    Google OAuth callback
+// @route   GET /api/auth/google/callback
+// @access  Public
+export const googleCallback = asyncHandler(async (req: AuthRequest, res: Response) => {
+  const user = req.user as any;
+
+  if (!user) {
+    throw new AppError('Authentication failed', 401);
+  }
+
+  // Generate tokens
+  const accessToken = generateAccessToken(user._id.toString());
+  const refreshToken = generateRefreshToken(user._id.toString());
+
+  // Set cookies
+  setTokenCookies(res, accessToken, refreshToken);
+
+  // Redirect to frontend with success
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+  res.redirect(`${frontendUrl}/callback?success=true`);
+});
+
+// @desc    Initiate Google OAuth
+// @route   GET /api/auth/google
+// @access  Public
+export const googleAuth = passport.authenticate('google', {
+  scope: ['profile', 'email']
 });

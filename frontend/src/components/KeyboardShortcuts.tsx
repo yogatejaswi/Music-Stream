@@ -2,111 +2,221 @@
 
 import { useEffect } from 'react';
 import { usePlayerStore } from '@/store/playerStore';
-import { useRouter } from 'next/navigation';
+import { useThemeStore } from '@/store/themeStore';
+import toast from 'react-hot-toast';
 
 export default function KeyboardShortcuts() {
-  const { togglePlay, playNext, playPrevious, setVolume, volume } = usePlayerStore();
-  const router = useRouter();
+  const { 
+    isPlaying, 
+    currentSong, 
+    volume, 
+    togglePlayPause, 
+    nextSong, 
+    previousSong, 
+    setVolume,
+    toggleShuffle,
+    toggleRepeat,
+    shuffle,
+    repeat
+  } = usePlayerStore();
+  
+  const { toggleTheme } = useThemeStore();
 
   useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      // Don't trigger if user is typing in an input
+    const handleKeyPress = (event: KeyboardEvent) => {
+      // Don't trigger shortcuts when typing in input fields
       if (
-        e.target instanceof HTMLInputElement ||
-        e.target instanceof HTMLTextAreaElement ||
-        e.target instanceof HTMLSelectElement
+        event.target instanceof HTMLInputElement ||
+        event.target instanceof HTMLTextAreaElement ||
+        event.target instanceof HTMLSelectElement ||
+        (event.target as HTMLElement)?.contentEditable === 'true'
       ) {
         return;
       }
 
-      switch (e.key.toLowerCase()) {
-        case ' ':
-          e.preventDefault();
-          togglePlay();
-          break;
-        
-        case 'arrowright':
-          if (e.shiftKey) {
-            e.preventDefault();
-            playNext();
+      // Prevent default behavior for our shortcuts
+      const shortcutKeys = [
+        'Space',
+        'ArrowLeft',
+        'ArrowRight',
+        'ArrowUp',
+        'ArrowDown',
+        'KeyM',
+        'KeyS',
+        'KeyR',
+        'KeyT',
+        'KeyL',
+        'KeyF'
+      ];
+
+      if (shortcutKeys.includes(event.code)) {
+        event.preventDefault();
+      }
+
+      switch (event.code) {
+        case 'Space':
+          // Play/Pause
+          if (currentSong) {
+            togglePlayPause();
+            toast.success(isPlaying ? 'Paused' : 'Playing', {
+              duration: 1000,
+              icon: isPlaying ? '⏸️' : '▶️'
+            });
           }
           break;
-        
-        case 'arrowleft':
-          if (e.shiftKey) {
-            e.preventDefault();
-            playPrevious();
+
+        case 'ArrowRight':
+          // Next song
+          if (event.shiftKey) {
+            // Shift + Right Arrow: Skip 10 seconds forward
+            // This would need to be implemented in the player store
+            toast.success('⏭️ +10s', { duration: 1000 });
+          } else {
+            nextSong();
+            toast.success('⏭️ Next song', { duration: 1000 });
           }
           break;
-        
-        case 'arrowup':
-          e.preventDefault();
-          setVolume(Math.min(1, volume + 0.1));
-          break;
-        
-        case 'arrowdown':
-          e.preventDefault();
-          setVolume(Math.max(0, volume - 0.1));
-          break;
-        
-        case 'm':
-          e.preventDefault();
-          setVolume(volume > 0 ? 0 : 0.7);
-          break;
-        
-        case 'h':
-          if (e.ctrlKey || e.metaKey) {
-            e.preventDefault();
-            router.push('/dashboard');
+
+        case 'ArrowLeft':
+          // Previous song
+          if (event.shiftKey) {
+            // Shift + Left Arrow: Skip 10 seconds backward
+            toast.success('⏮️ -10s', { duration: 1000 });
+          } else {
+            previousSong();
+            toast.success('⏮️ Previous song', { duration: 1000 });
           }
           break;
-        
-        case 's':
-          if (e.ctrlKey || e.metaKey) {
-            e.preventDefault();
-            router.push('/search');
+
+        case 'ArrowUp':
+          // Volume up
+          const newVolumeUp = Math.min(volume + 0.1, 1);
+          setVolume(newVolumeUp);
+          toast.success(`🔊 Volume: ${Math.round(newVolumeUp * 100)}%`, { duration: 1000 });
+          break;
+
+        case 'ArrowDown':
+          // Volume down
+          const newVolumeDown = Math.max(volume - 0.1, 0);
+          setVolume(newVolumeDown);
+          toast.success(`🔉 Volume: ${Math.round(newVolumeDown * 100)}%`, { duration: 1000 });
+          break;
+
+        case 'KeyM':
+          // Mute/Unmute
+          if (event.ctrlKey || event.metaKey) return; // Don't interfere with browser shortcuts
+          setVolume(volume > 0 ? 0 : 0.5);
+          toast.success(volume > 0 ? '🔇 Muted' : '🔊 Unmuted', { duration: 1000 });
+          break;
+
+        case 'KeyS':
+          // Toggle shuffle
+          if (event.ctrlKey || event.metaKey) return; // Don't interfere with save shortcut
+          toggleShuffle();
+          toast.success(shuffle ? '🔀 Shuffle off' : '🔀 Shuffle on', { duration: 1000 });
+          break;
+
+        case 'KeyR':
+          // Toggle repeat
+          if (event.ctrlKey || event.metaKey) return; // Don't interfere with refresh
+          toggleRepeat();
+          const repeatModes = ['off', 'all', 'one'];
+          const currentMode = repeatModes[repeat];
+          const nextMode = repeatModes[(repeat + 1) % 3];
+          toast.success(`🔁 Repeat: ${nextMode}`, { duration: 1000 });
+          break;
+
+        case 'KeyT':
+          // Toggle theme
+          if (event.ctrlKey || event.metaKey) return;
+          toggleTheme();
+          toast.success('🎨 Theme toggled', { duration: 1000 });
+          break;
+
+        case 'KeyL':
+          // Toggle like (placeholder - would need to be implemented)
+          if (event.ctrlKey || event.metaKey) return;
+          toast.success('❤️ Like toggled', { duration: 1000 });
+          break;
+
+        case 'KeyF':
+          // Focus search (placeholder - would need to be implemented)
+          if (event.ctrlKey || event.metaKey) return;
+          const searchInput = document.querySelector('input[type="search"]') as HTMLInputElement;
+          if (searchInput) {
+            searchInput.focus();
+            toast.success('🔍 Search focused', { duration: 1000 });
           }
           break;
-        
-        case 'l':
-          if (e.ctrlKey || e.metaKey) {
-            e.preventDefault();
-            router.push('/library');
+
+        case 'Slash':
+          // Show keyboard shortcuts help
+          if (!event.shiftKey) {
+            showShortcutsHelp();
           }
           break;
-        
-        case '?':
-          e.preventDefault();
-          showShortcutsHelp();
+
+        default:
           break;
       }
     };
 
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [togglePlay, playNext, playPrevious, setVolume, volume, router]);
+    // Add event listener
+    document.addEventListener('keydown', handleKeyPress);
+
+    // Cleanup
+    return () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [
+    isPlaying,
+    currentSong,
+    volume,
+    shuffle,
+    repeat,
+    togglePlayPause,
+    nextSong,
+    previousSong,
+    setVolume,
+    toggleShuffle,
+    toggleRepeat,
+    toggleTheme
+  ]);
 
   const showShortcutsHelp = () => {
-    const shortcuts = `
-Keyboard Shortcuts:
+    const shortcuts = [
+      { key: 'Space', action: 'Play/Pause' },
+      { key: '→', action: 'Next song' },
+      { key: '←', action: 'Previous song' },
+      { key: 'Shift + →', action: 'Skip forward 10s' },
+      { key: 'Shift + ←', action: 'Skip backward 10s' },
+      { key: '↑', action: 'Volume up' },
+      { key: '↓', action: 'Volume down' },
+      { key: 'M', action: 'Mute/Unmute' },
+      { key: 'S', action: 'Toggle shuffle' },
+      { key: 'R', action: 'Toggle repeat' },
+      { key: 'T', action: 'Toggle theme' },
+      { key: 'L', action: 'Toggle like' },
+      { key: 'F', action: 'Focus search' },
+      { key: '/', action: 'Show this help' }
+    ];
 
-Playback:
-  Space - Play/Pause
-  Shift + → - Next track
-  Shift + ← - Previous track
-  ↑ - Volume up
-  ↓ - Volume down
-  M - Mute/Unmute
+    const helpText = shortcuts
+      .map(s => `${s.key}: ${s.action}`)
+      .join('\n');
 
-Navigation:
-  Ctrl/Cmd + H - Home
-  Ctrl/Cmd + S - Search
-  Ctrl/Cmd + L - Library
-  ? - Show this help
-    `.trim();
-
-    alert(shortcuts);
+    toast.success(
+      `⌨️ Keyboard Shortcuts:\n\n${helpText}`,
+      { 
+        duration: 8000,
+        style: {
+          whiteSpace: 'pre-line',
+          textAlign: 'left'
+        }
+      }
+    );
   };
 
+  // This component doesn't render anything visible
   return null;
 }

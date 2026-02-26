@@ -33,7 +33,7 @@ export default function Sidebar() {
     { icon: FaRss, label: 'Activity Feed', href: '/feed' },
   ];
 
-  // Add history and charts for all users
+  // Add additional features
   navItems.push(
     { icon: FaHistory, label: 'History', href: '/history' },
     { icon: FaTrophy, label: 'Charts', href: '/charts' },

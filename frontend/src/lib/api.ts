@@ -234,3 +234,27 @@ export const searchAPI = {
   byGenre: (genre: string, params?: any) =>
     api.get(`/songs/genre/${genre}`, { params }),
 };
+
+// Lyrics API
+export const lyricsAPI = {
+  getSongLyrics: (songId: string) => api.get(`/lyrics/song/${songId}`),
+  
+  searchLyrics: (query: string, language?: string) =>
+    api.get('/lyrics/search', { params: { q: query, language } }),
+  
+  addLyrics: (data: {
+    songId: string;
+    lyrics: string;
+    syncedLyrics?: Array<{ time: number; text: string }>;
+    language?: string;
+    source?: string;
+  }) => api.post('/lyrics', data),
+  
+  updateLyrics: (id: string, data: any) => api.put(`/lyrics/${id}`, data),
+  
+  deleteLyrics: (id: string) => api.delete(`/lyrics/${id}`),
+  
+  getAllLyrics: (params?: any) => api.get('/lyrics', { params }),
+  
+  fetchLyrics: (songId: string) => api.post(`/lyrics/fetch/${songId}`),
+};

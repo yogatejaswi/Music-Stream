@@ -51,13 +51,17 @@ export default function SocialLoginButton({ provider, mode, className = '' }: So
     setLoading(true);
     
     try {
-      // Show loading toast
-      const loadingToast = toast.loading(`Connecting to ${config.name}...`);
+      // For Google OAuth, redirect to backend OAuth endpoint
+      if (provider === 'google') {
+        const backendUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+        window.location.href = `${backendUrl}/auth/google`;
+        return;
+      }
       
-      // Simulate OAuth flow - In production, this would redirect to OAuth provider
+      // For other providers (demo implementation)
+      const loadingToast = toast.loading(`Connecting to ${config.name}...`);
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      // Simulate successful OAuth response
       const mockUser = {
         id: `${provider}_user_${Date.now()}`,
         _id: `${provider}_user_${Date.now()}`,
@@ -70,17 +74,12 @@ export default function SocialLoginButton({ provider, mode, className = '' }: So
         createdAt: new Date().toISOString()
       };
       
-      // Dismiss loading toast
       toast.dismiss(loadingToast);
-      
-      // Set user in store
       setUser(mockUser);
       
-      // Show success message
       const action = mode === 'login' ? 'logged in' : 'registered';
       toast.success(`Successfully ${action} with ${config.name}! 🎉`);
       
-      // Redirect to dashboard
       router.push('/dashboard');
       
     } catch (error) {
@@ -93,10 +92,6 @@ export default function SocialLoginButton({ provider, mode, className = '' }: So
 
   // For production OAuth implementation
   const handleProductionOAuth = () => {
-    // This would redirect to your backend OAuth endpoint
-    // window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/${provider}`;
-    
-    // For now, use the demo implementation
     handleSocialAuth();
   };
 
