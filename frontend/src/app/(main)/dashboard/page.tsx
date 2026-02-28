@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { songsAPI, userAPI } from '@/lib/api';
 import SongCard from '@/components/song/SongCard';
 import Link from 'next/link';
+import Image from 'next/image';
 import toast from 'react-hot-toast';
 
 const genres = [
@@ -21,6 +22,7 @@ export default function DashboardPage() {
   const [trendingSongs, setTrendingSongs] = useState([]);
   const [recentSongs, setRecentSongs] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
+  const [artists, setArtists] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -29,15 +31,17 @@ export default function DashboardPage() {
 
   const fetchData = async () => {
     try {
-      const [trending, recent, recommended] = await Promise.all([
+      const [trending, recent, recommended, artistsData] = await Promise.all([
         songsAPI.getAll({ sort: '-playCount', limit: 10 }),
         songsAPI.getAll({ sort: '-createdAt', limit: 10 }),
-        userAPI.getRecommendations().catch(() => ({ data: { data: [] } }))
+        userAPI.getRecommendations().catch(() => ({ data: { data: [] } })),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/artists`).then(r => r.json()).catch(() => ({ data: [] }))
       ]);
 
       setTrendingSongs(trending.data.data || []);
       setRecentSongs(recent.data.data || []);
       setRecommendations(recommended.data.data || []);
+      setArtists(artistsData.data || []);
     } catch (error: any) {
       console.error('Error loading content:', error);
     } finally {
@@ -86,6 +90,37 @@ export default function DashboardPage() {
         </div>
       ) : (
         <>
+          {/* Popular Artists */}
+          {artists.length > 0 && (
+            <section>
+              <h2 className="text-2xl font-bold mb-4 text-white">Popular Artists</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                {artists.slice(0, 6).map((artist: any) => (
+                  <Link
+                    key={artist._id}
+                    href={`/artist/${artist._id}`}
+                    className="group"
+                  >
+                    <div className="bg-dark-200 rounded-lg p-4 hover:bg-dark-100 transition-all hover:scale-105">
+                      <div className="relative w-full aspect-square mb-3 rounded-full overflow-hidden">
+                        <Image
+                          src={artist.image || `https://ui-avatars.com/api/?name=${encodeURIComponent(artist.name)}&size=200&background=random`}
+                          alt={artist.name}
+                          width={200}
+                          height={200}
+                          className="w-full h-full object-cover"
+                          unoptimized
+                        />
+                      </div>
+                      <h3 className="font-semibold text-center truncate text-white">{artist.name}</h3>
+                      <p className="text-sm text-gray-400 text-center">{artist.genre || 'Artist'}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+
           {trendingSongs.length > 0 && (
             <section>
               <h2 className="text-2xl font-bold mb-4 text-white">Trending Now</h2>

@@ -70,10 +70,17 @@ export default function Player() {
       // Fetch song details including lyrics
       const fetchSongDetails = async () => {
         try {
-          const response = await songsAPI.getById(currentSong.id);
-          setSongLyrics(response.data.data.lyrics || '');
+          // Fetch lyrics from lyrics API
+          const lyricsResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/lyrics/song/${currentSong.id}`);
+          if (lyricsResponse.ok) {
+            const lyricsData = await lyricsResponse.json();
+            setSongLyrics(lyricsData.lyrics.lyrics || '');
+          } else {
+            setSongLyrics('');
+          }
         } catch (error) {
-          console.error('Failed to fetch song details:', error);
+          console.error('Failed to fetch lyrics:', error);
+          setSongLyrics('');
         }
       };
       

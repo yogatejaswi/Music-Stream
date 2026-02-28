@@ -31,6 +31,7 @@ export default function SongPage() {
   const [song, setSong] = useState<Song | null>(null);
   const [loading, setLoading] = useState(true);
   const [isLiked, setIsLiked] = useState(false);
+  const [lyrics, setLyrics] = useState<string>('');
   const { currentSong, isPlaying, setCurrentSong, togglePlay } = usePlayerStore();
 
   const isCurrentSong = currentSong?.id === songId;
@@ -38,6 +39,7 @@ export default function SongPage() {
   useEffect(() => {
     if (songId) {
       fetchSong();
+      fetchLyrics();
     }
   }, [songId]);
 
@@ -50,6 +52,18 @@ export default function SongPage() {
       toast.error('Failed to load song');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchLyrics = async () => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/lyrics/song/${songId}`);
+      if (response.ok) {
+        const data = await response.json();
+        setLyrics(data.lyrics.lyrics);
+      }
+    } catch (error) {
+      console.log('No lyrics available for this song');
     }
   };
 
@@ -226,11 +240,11 @@ export default function SongPage() {
       </div>
 
       {/* Lyrics */}
-      {song.lyrics && (
+      {lyrics && (
         <div className="bg-dark-300 rounded-lg p-6">
           <h2 className="text-2xl font-semibold mb-4">Lyrics</h2>
           <div className="whitespace-pre-line text-gray-300 leading-relaxed">
-            {song.lyrics}
+            {lyrics}
           </div>
         </div>
       )}
