@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 
 const genres = ['Pop', 'Rock', 'Hip Hop', 'Jazz', 'Classical', 'Electronic', 'Country', 'R&B'];
 const moods = ['happy', 'sad', 'energetic', 'calm', 'romantic', 'party', 'workout', 'chill'];
-const languages = ['English', 'Spanish', 'French', 'Hindi', 'Korean', 'Japanese'];
+const languages = ['English', 'Spanish', 'French', 'Hindi', 'Telugu', 'Tamil', 'Korean', 'Japanese'];
 
 export default function SearchPage() {
   const [query, setQuery] = useState('');

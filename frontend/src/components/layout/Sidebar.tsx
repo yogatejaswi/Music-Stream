@@ -6,6 +6,7 @@ import { FaHome, FaSearch, FaMusic, FaHeart, FaCrown, FaSignOutAlt, FaUserShield
 import { useAuthStore } from '@/store/authStore';
 import { authAPI } from '@/lib/api';
 import toast from 'react-hot-toast';
+import ThemeToggle from '@/components/theme/ThemeToggle';
 
 export default function Sidebar() {
   const pathname = usePathname();

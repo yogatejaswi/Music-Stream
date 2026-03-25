@@ -21,11 +21,12 @@ export const getAllSongs = asyncHandler(async (req: AuthRequest, res: Response) 
     query.genre = genre;
   }
 
-  // Search by title or artist
+  // Search by title, artist, or album
   if (search) {
     query.$or = [
       { title: { $regex: search, $options: 'i' } },
-      { artist: { $regex: search, $options: 'i' } }
+      { artist: { $regex: search, $options: 'i' } },
+      { album: { $regex: search, $options: 'i' } }
     ];
   }
 

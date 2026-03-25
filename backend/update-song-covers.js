@@ -10,27 +10,43 @@ async function updateSongCovers() {
     const db = mongoose.connection.db;
     const songsCollection = db.collection('songs');
 
-    const coverImageUrl = "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh7wyJ4OhVFPy2BTe0uGWAdocnLGMH-lKnHsd3SttWJuGZgVLBRBQ6UW3h9PyaV4s7n_gjlKdfhtfJMJdfiKKHovvNmznV-Qo3xu215YmNMozVO01Qr4J3mBXU3xxk4hfaoyQ-KYjYcZXA/s1600/1567265546408_FL+copy.jpg";
-
-    const songsToUpdate = [
-      "Butta Bomma",
-      "Ramuloo Ramulaa",
-      "Samajavaragamana"
+    // Song cover updates
+    const updates = [
+      {
+        title: "Butta Bomma",
+        coverImage: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh7wyJ4OhVFPy2BTe0uGWAdocnLGMH-lKnHsd3SttWJuGZgVLBRBQ6UW3h9PyaV4s7n_gjlKdfhtfJMJdfiKKHovvNmznV-Qo3xu215YmNMozVO01Qr4J3mBXU3xxk4hfaoyQ-KYjYcZXA/s1600/1567265546408_FL+copy.jpg"
+      },
+      {
+        title: "Ramuloo Ramulaa",
+        coverImage: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh7wyJ4OhVFPy2BTe0uGWAdocnLGMH-lKnHsd3SttWJuGZgVLBRBQ6UW3h9PyaV4s7n_gjlKdfhtfJMJdfiKKHovvNmznV-Qo3xu215YmNMozVO01Qr4J3mBXU3xxk4hfaoyQ-KYjYcZXA/s1600/1567265546408_FL+copy.jpg"
+      },
+      {
+        title: "Samajavaragamana",
+        coverImage: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEh7wyJ4OhVFPy2BTe0uGWAdocnLGMH-lKnHsd3SttWJuGZgVLBRBQ6UW3h9PyaV4s7n_gjlKdfhtfJMJdfiKKHovvNmznV-Qo3xu215YmNMozVO01Qr4J3mBXU3xxk4hfaoyQ-KYjYcZXA/s1600/1567265546408_FL+copy.jpg"
+      },
+      {
+        title: "Inkem Inkem",
+        coverImage: "https://talesntunes.wordpress.com/wp-content/uploads/2018/08/vijay-devarakonda-rashmika-mandanna-geetha-govindam-first-look-poster-hd.jpg?w=840"
+      },
+      {
+        title: "Vachinde",
+        coverImage: "https://m.media-amazon.com/images/S/pv-target-images/da2c8e10a113baf0aa1a13717894aa37a735e43c093930edb0a3615d3add1df3.jpg"
+      }
     ];
 
     let updatedCount = 0;
     
-    for (const songTitle of songsToUpdate) {
+    for (const update of updates) {
       const result = await songsCollection.updateOne(
-        { title: songTitle },
-        { $set: { coverImage: coverImageUrl, updatedAt: new Date() } }
+        { title: update.title },
+        { $set: { coverImage: update.coverImage, updatedAt: new Date() } }
       );
       
       if (result.modifiedCount > 0) {
-        console.log(`✅ Updated cover for: ${songTitle}`);
+        console.log(`✅ Updated cover for: ${update.title}`);
         updatedCount++;
       } else {
-        console.log(`⚠️  Song not found: ${songTitle}`);
+        console.log(`⚠️  Song not found or already updated: ${update.title}`);
       }
     }
 

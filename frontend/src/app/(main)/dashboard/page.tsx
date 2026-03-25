@@ -23,6 +23,7 @@ export default function DashboardPage() {
   const [recentSongs, setRecentSongs] = useState([]);
   const [recommendations, setRecommendations] = useState([]);
   const [artists, setArtists] = useState([]);
+  const [albums, setAlbums] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -42,6 +43,20 @@ export default function DashboardPage() {
       setRecentSongs(recent.data.data || []);
       setRecommendations(recommended.data.data || []);
       setArtists(artistsData.data || []);
+      
+      // Extract unique albums from songs
+      const allSongs = [...(trending.data.data || []), ...(recent.data.data || [])];
+      const uniqueAlbums = Array.from(new Set(allSongs.filter(s => s.album).map(s => s.album)))
+        .map(albumName => {
+          const song = allSongs.find(s => s.album === albumName);
+          return {
+            name: albumName,
+            coverImage: song?.coverImage,
+            artist: song?.artist,
+            _id: albumName
+          };
+        });
+      setAlbums(uniqueAlbums);
     } catch (error: any) {
       console.error('Error loading content:', error);
     } finally {
@@ -114,6 +129,37 @@ export default function DashboardPage() {
                       </div>
                       <h3 className="font-semibold text-center truncate text-white">{artist.name}</h3>
                       <p className="text-sm text-gray-400 text-center">{artist.genre || 'Artist'}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Popular Albums */}
+          {albums.length > 0 && (
+            <section>
+              <h2 className="text-2xl font-bold mb-4 text-white">Popular Albums</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                {albums.slice(0, 5).map((album: any) => (
+                  <Link
+                    key={album._id}
+                    href={`/search?q=${encodeURIComponent(album.name)}`}
+                    className="group"
+                  >
+                    <div className="bg-dark-200 rounded-lg p-4 hover:bg-dark-100 transition-all hover:scale-105">
+                      <div className="relative w-full aspect-square mb-3 rounded-lg overflow-hidden">
+                        <Image
+                          src={album.coverImage || 'https://via.placeholder.com/300'}
+                          alt={album.name}
+                          width={300}
+                          height={300}
+                          className="w-full h-full object-cover"
+                          unoptimized
+                        />
+                      </div>
+                      <h3 className="font-semibold truncate text-white">{album.name}</h3>
+                      <p className="text-sm text-gray-400 truncate">{album.artist}</p>
                     </div>
                   </Link>
                 ))}

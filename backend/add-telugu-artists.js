@@ -38,7 +38,7 @@ async function addTeluguArtists() {
       {
         name: "Armaan Malik",
         bio: "Armaan Malik is an Indian singer, songwriter, record producer, voice-over artist, and actor. Known for romantic melodies.",
-        image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop",
+        image: "https://assets.teenvogue.com/photos/61e194b6192e956300d6d02b/4:3/w_4099,h_3074,c_limit/Armaan%20Malik%203.jpg",
         genre: "Playback Singer",
         verified: true,
         followers: 0,
@@ -54,7 +54,7 @@ async function addTeluguArtists() {
       {
         name: "Anurag Kulkarni",
         bio: "Anurag Kulkarni is an Indian playback singer who predominantly works in Telugu cinema. Known for energetic folk songs.",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
+        image: "https://i.scdn.co/image/ab676161000051749f6590e0cef7d0ac838966b0",
         genre: "Folk Singer",
         verified: true,
         followers: 0,
@@ -69,7 +69,7 @@ async function addTeluguArtists() {
       {
         name: "Madhu Priya",
         bio: "Madhu Priya is an Indian playback singer who works predominantly in Telugu cinema. Known for folk and romantic songs.",
-        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
+        image: "https://c.saavncdn.com/artists/Madhu_Priya_002_20250207143023_500x500.jpg",
         genre: "Folk Singer",
         verified: true,
         followers: 0,
@@ -83,7 +83,7 @@ async function addTeluguArtists() {
       {
         name: "Javed Ali",
         bio: "Javed Ali is an Indian playback singer who has sung in many languages including Telugu. Known for soulful romantic songs.",
-        image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
+        image: "https://i.scdn.co/image/ab6761610000e5eb84e0829f8e8abff52255fbd3",
         genre: "Playback Singer",
         verified: true,
         followers: 0,
@@ -98,7 +98,7 @@ async function addTeluguArtists() {
       {
         name: "Mangli",
         bio: "Mangli is an Indian playback singer and television presenter who works in Telugu cinema. Known for folk and mass songs.",
-        image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1TpzDHvyUxrZwHLEIi6-uJ_BQmizhE7MG_w&s",
         genre: "Folk Singer",
         verified: true,
         followers: 0,

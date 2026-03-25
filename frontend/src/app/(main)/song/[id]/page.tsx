@@ -39,14 +39,22 @@ export default function SongPage() {
   useEffect(() => {
     if (songId) {
       fetchSong();
-      fetchLyrics();
     }
   }, [songId]);
 
   const fetchSong = async () => {
     try {
       const response = await songsAPI.getById(songId);
-      setSong(response.data.data);
+      const songData = response.data.data;
+      setSong(songData);
+      
+      // Set lyrics from song data if available
+      if (songData.lyrics) {
+        setLyrics(songData.lyrics);
+      } else {
+        // Try fetching from separate lyrics API as fallback
+        fetchLyrics();
+      }
     } catch (error) {
       console.error('Error fetching song:', error);
       toast.error('Failed to load song');
@@ -57,13 +65,25 @@ export default function SongPage() {
 
   const fetchLyrics = async () => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/lyrics/song/${songId}`);
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+      console.log('Fetching lyrics from:', `${apiUrl}/lyrics/song/${songId}`);
+      
+      const response = await fetch(`${apiUrl}/lyrics/song/${songId}`);
+      console.log('Lyrics response status:', response.status);
+      
       if (response.ok) {
         const data = await response.json();
-        setLyrics(data.lyrics.lyrics);
+        console.log('Lyrics data:', data);
+        
+        if (data.lyrics && data.lyrics.lyrics) {
+          setLyrics(data.lyrics.lyrics);
+          console.log('Lyrics set successfully');
+        }
+      } else {
+        console.log('Lyrics not found, response:', await response.text());
       }
     } catch (error) {
-      console.log('No lyrics available for this song');
+      console.error('Error fetching lyrics:', error);
     }
   };
 

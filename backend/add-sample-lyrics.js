@@ -174,7 +174,93 @@ Ramulo ramula na panam tisindhiro
 
 `,
 
-            'Inkem Inkem Inkem Kavale': `Thadigina thakhajanu
+            'Inkem Inkem': `Thadigina thakhajanu
+Thadigina thakhajanu
+Tharikita thadharina
+Thadhemdhemtha aanandham
+Thalavani thalapuga
+Yedhalanu kalupaga
+Modhalika modhalika
+Mallee Geetha Govindam
+
+Inkem inkem inkem kaavale
+Chaalle idhi chaale
+Neekai nuvve vacchi vaalave
+Ikapai thiranalley
+Gundellona vegam penchave
+Gummamloki holy thecchave
+Nuvvu pakkanunte inthenemone
+Naakokko ganta okko janme
+Malli putti chasthunnane
+
+Inkem inkem inkem kaavaale
+Chaalle idhi chaale
+Neekai nuvve vacchi vaalave
+Ikapai thiranalley
+
+Thadigina thakhajanu
+Thadigina thakhajanu
+Tharikita thadharina
+Thadhemdhemtha aanandham
+Thalavani thalapuga
+Yedhalanu kalupaga
+Modhalika modhalika
+Mallee Geetha Govindam
+Oohalaku dhorakani sogasaa
+Ooprini vadhalani golusaaa
+Neeku mudi padinadhi thelusaa
+Manasuna prathi kosaa
+Nee kanula merupula varasaa
+Repinadhi vayasuna rabhasaa
+Naa chilipi kalalaku bhahusaa
+idhi velugula dhasaa
+
+Nee yedhuta nilabadu chanuvey veesaa
+Andhukuni gaganapu konaley choosa
+
+Inkem inkem inkem kaavaale
+Chaalle idhi chaale
+Neekai nuvve vacchi vaalaave
+Ikapai thiranalley
+
+Maayalaku kadhalani maguvaa
+Maatalaku karagani madhuuvaa
+Panthamulu viduvani biguvaa
+Jariginadhadagavaa
+
+Naa kadhani theluputa suluvaa
+Jaalipadi numishamu vinavaa
+Yendukani gadikoka godavaa
+Chelimiga melagavaa
+Naa peru thalachithe ubike laavaa
+Challabadi nanu nuvu karuninchevaa
+
+Inkem inkem inkem kaavale
+Chaalle idhi chaale
+Neekai nuvve vacchi vaalave
+Ikapai thiranalley
+Gundellona vegam penchaavey
+Gummamloki holy thecchaave
+Nuvvu pakkanunte inthenemone
+Naakokko ganta okko janme
+Malli putti chasthunnaaney
+
+Inkem inkem inkem kavale
+Chaalle idhi chaale
+Neekai nuvve vacchi vaalave
+Ikapai thiranalley
+
+Thadigina thakhajanu
+Thadigina thakhajanu
+Tharikita thadharina
+Thadhemdhemtha aanandham
+Thalavani thalapuga
+Yedhalanu kalupaga
+Modhalika modhalika
+Mallee Geetha Govindam`,
+
+            // Add alternate key for "Inkem Inkem" (shorter title)
+            'Inkem Inkem': `Thadigina thakhajanu
 Thadigina thakhajanu
 Tharikita thadharina
 Thadhemdhemtha aanandham
