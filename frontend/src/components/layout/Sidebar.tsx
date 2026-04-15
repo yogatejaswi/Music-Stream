@@ -2,16 +2,16 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { FaHome, FaSearch, FaMusic, FaHeart, FaCrown, FaSignOutAlt, FaUserShield, FaHistory, FaTrophy, FaCog, FaRss } from 'react-icons/fa';
+import { FaHome, FaSearch, FaMusic, FaHeart, FaCrown, FaSignOutAlt, FaUserShield, FaHistory, FaTrophy, FaCog, FaRss, FaChartLine, FaDownload } from 'react-icons/fa';
 import { useAuthStore } from '@/store/authStore';
 import { authAPI } from '@/lib/api';
 import toast from 'react-hot-toast';
-import ThemeToggle from '@/components/theme/ThemeToggle';
 
 export default function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const { user, logout } = useAuthStore();
+  const dashboardHref = user?.role === 'admin' ? '/admin' : '/dashboard';
 
   console.log('Sidebar user data:', user);
 
@@ -27,9 +27,10 @@ export default function Sidebar() {
   };
 
   const navItems = [
-    { icon: FaHome, label: 'Home', href: '/dashboard' },
+    { icon: FaHome, label: user?.role === 'admin' ? 'Admin Dashboard' : 'Home', href: dashboardHref },
     { icon: FaSearch, label: 'Search', href: '/search' },
     { icon: FaMusic, label: 'Library', href: '/library' },
+    { icon: FaDownload, label: 'Downloads', href: '/downloads' },
     { icon: FaHeart, label: 'Liked Songs', href: '/liked' },
     { icon: FaRss, label: 'Activity Feed', href: '/feed' },
   ];
@@ -38,12 +39,14 @@ export default function Sidebar() {
   navItems.push(
     { icon: FaHistory, label: 'History', href: '/history' },
     { icon: FaTrophy, label: 'Charts', href: '/charts' },
+    { icon: FaMusic, label: 'Playlists', href: '/playlists' },
+    { icon: FaChartLine, label: 'Recommendations', href: '/recommendations' },
     { icon: FaCog, label: 'Settings', href: '/settings' }
   );
 
   // Add admin link if user is admin
   if (user?.role === 'admin') {
-    navItems.push({ icon: FaUserShield, label: 'Admin', href: '/admin' });
+    navItems.push({ icon: FaUserShield, label: 'Admin Uploads', href: '/admin#upload' });
   }
 
   return (

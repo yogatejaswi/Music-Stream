@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { songsAPI } from '@/lib/api';
 import SongCard from '@/components/song/SongCard';
-import { FaRobot, FaRefresh, FaHeart, FaClock, FaMusic, FaTrendingUp } from 'react-icons/fa';
+import { FaRobot, FaRefresh, FaHeart, FaClock, FaMusic, FaChartLine } from 'react-icons/fa';
 
 interface Song {
   _id: string;
@@ -79,7 +79,7 @@ export default function SmartRecommendations() {
           id: 'trending',
           title: 'Trending Now',
           description: 'Popular songs everyone is listening to',
-          icon: FaTrendingUp,
+          icon: FaChartLine,
           color: 'text-green-500',
           songs: trending.data.data || []
         },

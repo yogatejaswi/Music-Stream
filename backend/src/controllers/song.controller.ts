@@ -1,8 +1,11 @@
 import { Response } from 'express';
 import Song from '../models/Song';
+import Album from '../models/Album';
 import User from '../models/User';
 import { asyncHandler, AppError } from '../middleware/error.middleware';
 import { AuthRequest } from '../middleware/auth.middleware';
+
+const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 // @desc    Get all songs with pagination and filters
 // @route   GET /api/songs
@@ -11,6 +14,10 @@ export const getAllSongs = asyncHandler(async (req: AuthRequest, res: Response) 
   const page = parseInt(req.query.page as string) || 1;
   const limit = parseInt(req.query.limit as string) || 20;
   const genre = req.query.genre as string;
+  const mood = req.query.mood as string;
+  const language = req.query.language as string;
+  const year = req.query.year as string;
+  const explicit = req.query.explicit as string;
   const search = req.query.search as string;
   const sort = req.query.sort as string || '-createdAt';
 
@@ -21,13 +28,39 @@ export const getAllSongs = asyncHandler(async (req: AuthRequest, res: Response) 
     query.genre = genre;
   }
 
-  // Search by title, artist, or album
+  if (mood) {
+    query.mood = mood;
+  }
+
+  if (language) {
+    query.language = language;
+  }
+
+  if (year) {
+    query.releaseYear = parseInt(year);
+  }
+
+  if (explicit !== undefined && explicit !== '') {
+    query.explicit = explicit === 'true';
+  }
+
+  // Search by title, artist, or album title
   if (search) {
+    const searchRegex = new RegExp(escapeRegex(search), 'i');
+    const matchingAlbums = await Album.find(
+      { title: searchRegex },
+      { _id: 1 }
+    ).lean();
+    const albumIds = matchingAlbums.map((album) => album._id);
+
     query.$or = [
-      { title: { $regex: search, $options: 'i' } },
-      { artist: { $regex: search, $options: 'i' } },
-      { album: { $regex: search, $options: 'i' } }
+      { title: searchRegex },
+      { artist: searchRegex },
     ];
+
+    if (albumIds.length > 0) {
+      query.$or.push({ album: { $in: albumIds } });
+    }
   }
 
   const skip = (page - 1) * limit;
@@ -197,9 +230,10 @@ export const advancedSearch = asyncHandler(async (req: AuthRequest, res: Respons
 
   // Text search
   if (q) {
+    const searchRegex = new RegExp(q as string, 'i');
     query.$or = [
-      { title: { $regex: q, $options: 'i' } },
-      { artist: { $regex: q, $options: 'i' } }
+      { title: searchRegex },
+      { artist: searchRegex }
     ];
   }
 

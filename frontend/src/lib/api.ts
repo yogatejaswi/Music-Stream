@@ -107,7 +107,7 @@ export const userAPI = {
   
   getLikedSongs: () => api.get('/user/liked-songs'),
   
-  getRecentlyPlayed: () => api.get('/user/recently-played'),
+  getRecentlyPlayed: (params?: any) => api.get('/user/recently-played', { params }),
   
   getRecommendations: () => api.get('/user/recommendations'),
   

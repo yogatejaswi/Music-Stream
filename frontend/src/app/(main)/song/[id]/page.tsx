@@ -9,6 +9,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
 import CommentsSection from '@/components/song/CommentsSection';
+import DownloadButton from '@/components/offline/DownloadButton';
 
 interface Song {
   _id: string;
@@ -231,6 +232,21 @@ export default function SongPage() {
                 <FaRegHeart size={24} className="text-gray-400 hover:text-white" />
               )}
             </button>
+
+            <div className="rounded-full bg-dark-300/80 px-4 py-3">
+              <DownloadButton
+                song={{
+                  _id: song._id,
+                  title: song.title,
+                  artist: song.artist,
+                  coverImage: song.coverImage,
+                  duration: song.duration,
+                  audioUrl: song.audioUrl
+                }}
+                size="md"
+                showLabel
+              />
+            </div>
           </div>
         </div>
       </div>

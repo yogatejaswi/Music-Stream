@@ -171,11 +171,11 @@ The architecture supports:
 ```bash
 # Backend tests
 cd backend
-npm test
+npm run dev
 
 # Frontend tests
 cd frontend
-npm test
+npm run dev
 ```
 
 ## 🚀 Deployment

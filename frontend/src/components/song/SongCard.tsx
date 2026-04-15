@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { usePlayerStore } from '@/store/playerStore';
 import { FaPlay, FaPause, FaHeart, FaRegHeart } from 'react-icons/fa';
 import { songsAPI } from '@/lib/api';
+import DownloadButton from '@/components/offline/DownloadButton';
 import toast from 'react-hot-toast';
 
 interface SongCardProps {
@@ -101,6 +102,10 @@ export default function SongCard({ song, allSongs = [], songIndex = 0 }: SongCar
           <FaRegHeart size={20} className="text-white drop-shadow-lg" />
         )}
       </button>
+
+      <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <DownloadButton song={song} size="sm" />
+      </div>
       
       <Link href={`/song/${song._id}`}>
         <h3 className="font-semibold truncate hover:text-primary-400 transition">{song.title}</h3>

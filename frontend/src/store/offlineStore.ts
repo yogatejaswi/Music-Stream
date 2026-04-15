@@ -8,6 +8,7 @@ interface OfflineSong {
   coverImage: string;
   duration: number;
   audioUrl: string;
+  sourceAudioUrl: string;
   downloadedAt: Date;
   size: number; // in bytes
 }
@@ -119,6 +120,7 @@ export const useOfflineStore = create<OfflineStore>()(
             coverImage: song.coverImage,
             duration: song.duration,
             audioUrl: audioUrl,
+            sourceAudioUrl: song.audioUrl,
             downloadedAt: new Date(),
             size: receivedLength
           };
