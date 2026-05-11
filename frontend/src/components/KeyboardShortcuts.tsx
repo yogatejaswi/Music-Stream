@@ -10,9 +10,9 @@ export default function KeyboardShortcuts() {
     isPlaying, 
     currentSong, 
     volume, 
-    togglePlayPause, 
-    nextSong, 
-    previousSong, 
+    togglePlay, 
+    playNext, 
+    playPrevious, 
     setVolume,
     toggleShuffle,
     toggleRepeat,
@@ -57,7 +57,7 @@ export default function KeyboardShortcuts() {
         case 'Space':
           // Play/Pause
           if (currentSong) {
-            togglePlayPause();
+            togglePlay();
             toast.success(isPlaying ? 'Paused' : 'Playing', {
               duration: 1000,
               icon: isPlaying ? '⏸️' : '▶️'
@@ -72,7 +72,7 @@ export default function KeyboardShortcuts() {
             // This would need to be implemented in the player store
             toast.success('⏭️ +10s', { duration: 1000 });
           } else {
-            nextSong();
+            playNext();
             toast.success('⏭️ Next song', { duration: 1000 });
           }
           break;
@@ -83,7 +83,7 @@ export default function KeyboardShortcuts() {
             // Shift + Left Arrow: Skip 10 seconds backward
             toast.success('⏮️ -10s', { duration: 1000 });
           } else {
-            previousSong();
+            playPrevious();
             toast.success('⏮️ Previous song', { duration: 1000 });
           }
           break;
@@ -119,10 +119,10 @@ export default function KeyboardShortcuts() {
         case 'KeyR':
           // Toggle repeat
           if (event.ctrlKey || event.metaKey) return; // Don't interfere with refresh
+          const repeatModes = ['off', 'all', 'one'] as const;
+          const currentModeIndex = repeatModes.indexOf(repeat);
+          const nextMode = repeatModes[(currentModeIndex + 1) % repeatModes.length];
           toggleRepeat();
-          const repeatModes = ['off', 'all', 'one'];
-          const currentMode = repeatModes[repeat];
-          const nextMode = repeatModes[(repeat + 1) % 3];
           toast.success(`🔁 Repeat: ${nextMode}`, { duration: 1000 });
           break;
 
@@ -174,9 +174,9 @@ export default function KeyboardShortcuts() {
     volume,
     shuffle,
     repeat,
-    togglePlayPause,
-    nextSong,
-    previousSong,
+    togglePlay,
+    playNext,
+    playPrevious,
     setVolume,
     toggleShuffle,
     toggleRepeat,

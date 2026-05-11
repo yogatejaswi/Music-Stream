@@ -11,6 +11,7 @@ import {
   FaTimes,
   FaCrown,
   FaHeart,
+  FaMedal,
   FaMusic,
   FaPlay,
   FaUpload,
@@ -61,8 +62,11 @@ export default function AdminPage() {
   const [submitting, setSubmitting] = useState(false);
   const [analytics, setAnalytics] = useState<Analytics | null>(null);
   const [users, setUsers] = useState<AdminUser[]>([]);
+  const [allUsers, setAllUsers] = useState<AdminUser[]>([]);
   const [songs, setSongs] = useState<AdminSong[]>([]);
   const [showUsersList, setShowUsersList] = useState(false);
+  const [showLikedSongsList, setShowLikedSongsList] = useState(false);
+  const [loadingUsersList, setLoadingUsersList] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     artist: '',
@@ -107,6 +111,34 @@ export default function AdminPage() {
       setLoading(false);
     }
   };
+
+  const fetchAllUsers = async () => {
+    try {
+      setLoadingUsersList(true);
+      const response = await adminAPI.getAllUsers({ limit: 100 });
+      setAllUsers(response.data.data || []);
+    } catch (error) {
+      console.error('Error loading users list:', error);
+      toast.error('Failed to load users list');
+    } finally {
+      setLoadingUsersList(false);
+    }
+  };
+
+  const openUsersList = async () => {
+    setShowUsersList(true);
+    if (!allUsers.length) {
+      await fetchAllUsers();
+    }
+  };
+
+  const totalLikes = analytics?.topSongs?.reduce((sum, song) => sum + song.likes, 0) || 0;
+  const mostLikedSong = analytics?.topSongs?.reduce((best, song) => {
+    if (!best || song.likes > best.likes) {
+      return song;
+    }
+    return best;
+  }, analytics?.topSongs?.[0]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -221,7 +253,7 @@ export default function AdminPage() {
       <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
         <button
           type="button"
-          onClick={() => setShowUsersList(true)}
+          onClick={openUsersList}
           className="rounded-2xl bg-sky-600 p-6 text-white text-left transition hover:bg-sky-500"
         >
           <div className="flex items-center justify-between">
@@ -254,15 +286,23 @@ export default function AdminPage() {
             <FaPlay size={28} className="text-fuchsia-100" />
           </div>
         </div>
-        <div className="rounded-2xl bg-rose-600 p-6 text-white">
+        <button
+          type="button"
+          onClick={() => setShowLikedSongsList(true)}
+          className="rounded-2xl bg-rose-600 p-6 text-left text-white transition hover:bg-rose-500"
+        >
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-rose-100">Top Song Likes</p>
-              <p className="mt-2 text-3xl font-bold">{analytics?.topSongs?.[0]?.likes || 0}</p>
+              <p className="mt-2 text-3xl font-bold">{mostLikedSong?.likes || 0}</p>
+              <p className="mt-3 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-rose-100">
+                View liked songs
+                <FaChevronRight />
+              </p>
             </div>
             <FaHeart size={28} className="text-rose-100" />
           </div>
-        </div>
+        </button>
       </section>
 
       <section className="grid grid-cols-1 xl:grid-cols-[1.2fr_0.8fr] gap-6">
@@ -274,7 +314,12 @@ export default function AdminPage() {
           <div className="space-y-3">
             {analytics?.topSongs?.length ? (
               analytics.topSongs.map((song, index) => (
-                <div key={song._id} className="flex items-center gap-4 rounded-2xl border border-white/5 bg-dark-300 p-4">
+                <button
+                  type="button"
+                  key={song._id}
+                  onClick={() => setShowLikedSongsList(true)}
+                  className="flex w-full items-center gap-4 rounded-2xl border border-white/5 bg-dark-300 p-4 text-left transition hover:border-primary-500/20 hover:bg-dark-100"
+                >
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-500 font-bold text-white">
                     {index + 1}
                   </div>
@@ -286,7 +331,7 @@ export default function AdminPage() {
                     <p>{song.playCount} plays</p>
                     <p>{song.likes} likes</p>
                   </div>
-                </div>
+                </button>
               ))
             ) : (
               <div className="rounded-2xl border border-dashed border-white/10 p-6 text-sm text-gray-400">
@@ -489,9 +534,30 @@ export default function AdminPage() {
             </div>
 
             <div className="max-h-[calc(85vh-88px)] overflow-y-auto p-6">
+              <div className="mb-5 grid grid-cols-1 gap-4 md:grid-cols-3">
+                <div className="rounded-2xl border border-white/10 bg-dark-300 p-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Total users</p>
+                  <p className="mt-2 text-3xl font-bold text-white">{allUsers.length || analytics?.totalUsers || 0}</p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-dark-300 p-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Admins</p>
+                  <p className="mt-2 text-3xl font-bold text-white">{allUsers.filter((member) => member.role === 'admin').length}</p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-dark-300 p-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Premium</p>
+                  <p className="mt-2 text-3xl font-bold text-white">
+                    {allUsers.filter((member) => member.subscription?.plan === 'premium').length}
+                  </p>
+                </div>
+              </div>
+
               <div className="space-y-3">
-                {users.length ? (
-                  users.map((member) => (
+                {loadingUsersList ? (
+                  <div className="rounded-2xl border border-dashed border-white/10 p-6 text-sm text-gray-400">
+                    Loading users...
+                  </div>
+                ) : allUsers.length ? (
+                  allUsers.map((member) => (
                     <div key={member._id} className="rounded-2xl border border-white/5 bg-dark-300 p-4">
                       <div className="flex items-center justify-between gap-4">
                         <div className="min-w-0">
@@ -515,6 +581,79 @@ export default function AdminPage() {
                 ) : (
                   <div className="rounded-2xl border border-dashed border-white/10 p-6 text-sm text-gray-400">
                     No users found.
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showLikedSongsList && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+          <div className="max-h-[85vh] w-full max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-dark-200 shadow-2xl">
+            <div className="flex items-center justify-between border-b border-white/10 px-6 py-5">
+              <div>
+                <h2 className="text-2xl font-semibold text-white">Most liked songs</h2>
+                <p className="text-sm text-gray-400">A quick view of the tracks getting the most love from listeners.</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowLikedSongsList(false)}
+                className="rounded-full p-3 text-gray-400 transition hover:bg-dark-300 hover:text-white"
+              >
+                <FaTimes />
+              </button>
+            </div>
+
+            <div className="max-h-[calc(85vh-88px)] overflow-y-auto p-6">
+              <div className="mb-5 grid grid-cols-1 gap-4 md:grid-cols-3">
+                <div className="rounded-2xl border border-white/10 bg-dark-300 p-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Featured song</p>
+                  <p className="mt-2 truncate text-xl font-bold text-white">{mostLikedSong?.title || 'No data yet'}</p>
+                  <p className="mt-1 truncate text-sm text-gray-400">{mostLikedSong?.artist || 'Upload and engage to populate stats'}</p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-dark-300 p-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Total likes shown</p>
+                  <p className="mt-2 text-3xl font-bold text-white">{totalLikes}</p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-dark-300 p-4">
+                  <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Top tracks</p>
+                  <p className="mt-2 text-3xl font-bold text-white">{analytics?.topSongs?.length || 0}</p>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {analytics?.topSongs?.length ? (
+                  analytics.topSongs
+                    .slice()
+                    .sort((a, b) => b.likes - a.likes)
+                    .map((song, index) => (
+                      <div key={song._id} className="rounded-2xl border border-white/5 bg-dark-300 p-4">
+                        <div className="flex items-center gap-4">
+                          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-500/15 text-lg font-bold text-rose-300">
+                            {index === 0 ? <FaMedal /> : index + 1}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="truncate font-semibold text-white">{song.title}</p>
+                            <p className="truncate text-sm text-gray-400">{song.artist}</p>
+                          </div>
+                          <div className="grid min-w-[150px] grid-cols-2 gap-3 text-right text-sm">
+                            <div>
+                              <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Likes</p>
+                              <p className="mt-1 font-semibold text-white">{song.likes}</p>
+                            </div>
+                            <div>
+                              <p className="text-xs uppercase tracking-[0.18em] text-gray-500">Plays</p>
+                              <p className="mt-1 font-semibold text-white">{song.playCount}</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                ) : (
+                  <div className="rounded-2xl border border-dashed border-white/10 p-6 text-sm text-gray-400">
+                    No liked-song analytics are available yet.
                   </div>
                 )}
               </div>

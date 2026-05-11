@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FaPlus, FaPlay, FaTrash, FaEdit, FaMusic } from 'react-icons/fa';
-import { playlistAPI } from '@/lib/api';
+import { FaPlus, FaPlay, FaTrash, FaMusic } from 'react-icons/fa';
+import { playlistsAPI } from '@/lib/api';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 
@@ -30,7 +30,7 @@ export default function PlaylistsPage() {
 
   const fetchPlaylists = async () => {
     try {
-      const response = await playlistAPI.getAll();
+      const response = await playlistsAPI.getAll();
       setPlaylists(response.data.data || []);
     } catch (error) {
       console.error('Error fetching playlists:', error);
@@ -49,7 +49,7 @@ export default function PlaylistsPage() {
     }
 
     try {
-      await playlistAPI.create({
+      await playlistsAPI.create({
         name: formData.name,
         description: formData.description
       });
@@ -67,7 +67,7 @@ export default function PlaylistsPage() {
     if (!confirm('Are you sure you want to delete this playlist?')) return;
 
     try {
-      await playlistAPI.delete(id);
+      await playlistsAPI.delete(id);
       toast.success('Playlist deleted');
       fetchPlaylists();
     } catch (error: any) {

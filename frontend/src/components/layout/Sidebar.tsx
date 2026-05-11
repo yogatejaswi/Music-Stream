@@ -78,7 +78,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="p-4 border-t border-gray-800 space-y-3 flex-shrink-0">
-        {user?.subscription?.plan === 'free' && (
+        {user?.role !== 'admin' && user?.subscription?.plan === 'free' && (
           <Link
             href="/subscription"
             className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-primary-500 to-green-400 rounded-lg hover:opacity-90 transition"
