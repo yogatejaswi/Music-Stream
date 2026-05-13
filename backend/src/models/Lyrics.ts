@@ -51,8 +51,6 @@ const lyricsSchema = new Schema<ILyrics>({
   timestamps: true
 });
 
-// Index for faster queries
-lyricsSchema.index({ songId: 1 });
 lyricsSchema.index({ language: 1 });
 
 export default mongoose.model<ILyrics>('Lyrics', lyricsSchema);

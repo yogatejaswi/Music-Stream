@@ -27,7 +27,7 @@ import lyricsRoutes from './routes/lyrics.routes';
 dotenv.config();
 
 const app: Application = express();
-const PORT = process.env.PORT || 5000;
+const PORT = Number(process.env.PORT) || 5000;
 
 // Security middleware
 app.use(helmet({
@@ -88,9 +88,18 @@ app.use(errorMiddleware);
 const startServer = async () => {
   try {
     await connectDatabase();
-    app.listen(PORT, () => {
+    const server = app.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`📝 Environment: ${process.env.NODE_ENV}`);
+    });
+
+    server.on('error', (error: NodeJS.ErrnoException) => {
+      if (error.code === 'EADDRINUSE') {
+        console.error(`Port ${PORT} is already in use. Stop the other process or set a different PORT in .env.`);
+        process.exit(1);
+      }
+
+      throw error;
     });
   } catch (error) {
     console.error('Failed to start server:', error);
