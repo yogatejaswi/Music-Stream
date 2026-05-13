@@ -20,6 +20,8 @@ interface SongCardProps {
   };
   allSongs?: any[];
   songIndex?: number;
+  showArtist?: boolean;
+  compact?: boolean;
 }
 
 export default function SongCard({ song, allSongs = [], songIndex = 0 }: SongCardProps) {

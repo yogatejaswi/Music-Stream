@@ -6,6 +6,20 @@ import { FaMicrophone, FaMicrophoneSlash, FaVolumeUp, FaVolumeDown } from 'react
 import { songsAPI } from '@/lib/api';
 import toast from 'react-hot-toast';
 
+type BrowserSpeechRecognition = {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onstart: (() => void) | null;
+  onresult: ((event: { results: { [index: number]: { [index: number]: { transcript: string } } } }) => void) | null;
+  onerror: ((event: { error: string }) => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+  stop: () => void;
+};
+
+type BrowserSpeechRecognitionConstructor = new () => BrowserSpeechRecognition;
+
 interface VoiceControlProps {
   className?: string;
 }
@@ -14,7 +28,7 @@ export default function VoiceControl({ className = '' }: VoiceControlProps) {
   const [isListening, setIsListening] = useState(false);
   const [isSupported, setIsSupported] = useState(false);
   const [transcript, setTranscript] = useState('');
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const recognitionRef = useRef<BrowserSpeechRecognition | null>(null);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const {
@@ -135,7 +149,7 @@ export default function VoiceControl({ className = '' }: VoiceControlProps) {
         setRepeat('all');
         toast.success('Repeat enabled');
       } else if (command.includes('repeat off') || command.includes('disable repeat')) {
-        setRepeat('none');
+        setRepeat('off');
         toast.success('Repeat disabled');
       } else if (command.includes('repeat one') || command.includes('repeat this song')) {
         setRepeat('one');
@@ -268,7 +282,7 @@ export default function VoiceControl({ className = '' }: VoiceControlProps) {
 // Extend Window interface for TypeScript
 declare global {
   interface Window {
-    SpeechRecognition: typeof SpeechRecognition;
-    webkitSpeechRecognition: typeof SpeechRecognition;
+    SpeechRecognition?: BrowserSpeechRecognitionConstructor;
+    webkitSpeechRecognition?: BrowserSpeechRecognitionConstructor;
   }
 }

@@ -29,7 +29,9 @@ export default function LyricsDisplay() {
 
   // Fetch lyrics when song changes
   useEffect(() => {
-    if (!currentSong?._id) {
+    const songId = currentSong?._id || currentSong?.id;
+
+    if (!songId) {
       setLyrics(null);
       return;
     }
@@ -39,7 +41,7 @@ export default function LyricsDisplay() {
       setError(null);
       
       try {
-        const response = await lyricsAPI.getSongLyrics(currentSong._id);
+        const response = await lyricsAPI.getSongLyrics(songId);
         setLyrics(response.data.lyrics);
       } catch (err: any) {
         setError(err.response?.data?.message || 'Lyrics not available');
@@ -50,18 +52,19 @@ export default function LyricsDisplay() {
     };
 
     fetchLyrics();
-  }, [currentSong?._id]);
+  }, [currentSong?._id, currentSong?.id]);
 
   // Update current line for synced lyrics
   useEffect(() => {
-    if (!lyrics?.syncedLyrics || !isPlaying) return;
+    const syncedLyrics = lyrics?.syncedLyrics;
+    if (!syncedLyrics || !isPlaying) return;
 
     const updateCurrentLine = () => {
       const currentTimeSeconds = currentTime;
       let lineIndex = -1;
 
-      for (let i = 0; i < lyrics.syncedLyrics.length; i++) {
-        if (currentTimeSeconds >= lyrics.syncedLyrics[i].time) {
+      for (let i = 0; i < syncedLyrics.length; i++) {
+        if (currentTimeSeconds >= syncedLyrics[i].time) {
           lineIndex = i;
         } else {
           break;

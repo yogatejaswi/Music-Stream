@@ -1,6 +1,8 @@
 import { create } from 'zustand';
+import { createRef } from 'react';
 
 interface Song {
+  _id?: string;
   id: string;
   title: string;
   artist: string;
@@ -20,9 +22,10 @@ interface PlayerState {
   queue: Song[];
   shuffle: boolean;
   repeat: RepeatMode;
+  audioRef: React.RefObject<HTMLAudioElement>;
   
   // Actions
-  setCurrentSong: (song: Song) => void;
+  setCurrentSong: (song: Song | null) => void;
   setQueue: (songs: Song[], startIndex?: number) => void;
   togglePlay: () => void;
   setVolume: (volume: number) => void;
@@ -31,9 +34,13 @@ interface PlayerState {
   playNext: () => void;
   playPrevious: () => void;
   toggleShuffle: () => void;
+  setShuffle: (shuffle: boolean) => void;
   toggleRepeat: () => void;
+  setRepeat: (repeat: RepeatMode) => void;
   addToQueue: (song: Song) => void;
   clearQueue: () => void;
+  nextSong: () => void;
+  previousSong: () => void;
 }
 
 export const usePlayerStore = create<PlayerState>((set, get) => ({
@@ -45,8 +52,9 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   queue: [],
   shuffle: false,
   repeat: 'off',
+  audioRef: createRef<HTMLAudioElement>(),
 
-  setCurrentSong: (song: Song) => set({ currentSong: song, isPlaying: true }),
+  setCurrentSong: (song: Song | null) => set({ currentSong: song, isPlaying: !!song }),
   
   setQueue: (songs: Song[], startIndex = 0) => set({ 
     queue: songs, 
@@ -114,6 +122,7 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
   },
   
   toggleShuffle: () => set((state) => ({ shuffle: !state.shuffle })),
+  setShuffle: (shuffle: boolean) => set({ shuffle }),
   
   toggleRepeat: () => set((state) => {
     const modes: RepeatMode[] = ['off', 'all', 'one'];
@@ -121,8 +130,12 @@ export const usePlayerStore = create<PlayerState>((set, get) => ({
     const nextIndex = (currentIndex + 1) % modes.length;
     return { repeat: modes[nextIndex] };
   }),
+  setRepeat: (repeat: RepeatMode) => set({ repeat }),
   
   addToQueue: (song: Song) => set((state) => ({ queue: [...state.queue, song] })),
   
   clearQueue: () => set({ queue: [] }),
+
+  nextSong: () => get().playNext(),
+  previousSong: () => get().playPrevious(),
 }));

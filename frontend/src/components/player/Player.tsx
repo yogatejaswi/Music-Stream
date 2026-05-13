@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { usePlayerStore } from '@/store/playerStore';
 import PlayerControls from './PlayerControls';
 import ProgressBar from './ProgressBar';
@@ -14,7 +14,6 @@ import { songsAPI, historyAPI } from '@/lib/api';
 import toast from 'react-hot-toast';
 
 export default function Player() {
-  const audioRef = useRef<HTMLAudioElement>(null);
   const [isLiked, setIsLiked] = useState(false);
   const [songLyrics, setSongLyrics] = useState<string>('');
   const [playStartTime, setPlayStartTime] = useState<number>(0);
@@ -27,6 +26,7 @@ export default function Player() {
     setDuration,
     playNext,
     repeat,
+    audioRef,
   } = usePlayerStore();
 
   // Handle play/pause

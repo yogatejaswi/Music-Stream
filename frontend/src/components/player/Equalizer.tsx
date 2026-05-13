@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { usePlayerStore } from '@/store/playerStore';
-import { FaSliders, FaTimes, FaUndo } from 'react-icons/fa';
+import { FaSlidersH, FaTimes, FaUndo } from 'react-icons/fa';
 
 interface EqualizerProps {
   isOpen: boolean;
@@ -157,7 +157,7 @@ export default function Equalizer({ isOpen, onClose }: EqualizerProps) {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-3">
-            <FaSliders className="text-primary-500" size={24} />
+            <FaSlidersH className="text-primary-500" size={24} />
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
               Equalizer
             </h2>
@@ -233,7 +233,7 @@ export default function Equalizer({ isOpen, onClose }: EqualizerProps) {
                     onChange={(e) => handleBandChange(index, parseFloat(e.target.value))}
                     className="slider-vertical h-32 w-4 appearance-none bg-gray-200 dark:bg-gray-700 rounded-lg cursor-pointer"
                     style={{
-                      writingMode: 'bt-lr',
+                      writingMode: 'vertical-lr',
                       WebkitAppearance: 'slider-vertical'
                     }}
                     disabled={!isEnabled}

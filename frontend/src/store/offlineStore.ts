@@ -109,7 +109,7 @@ export const useOfflineStore = create<OfflineStore>()(
           }
 
           // Convert chunks to blob
-          const audioBlob = new Blob(chunks, { type: 'audio/mpeg' });
+          const audioBlob = new Blob(chunks as unknown as BlobPart[], { type: 'audio/mpeg' });
           const audioUrl = URL.createObjectURL(audioBlob);
 
           // Create offline song object

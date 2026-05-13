@@ -77,6 +77,12 @@ export const songsAPI = {
   play: (id: string) => api.post(`/songs/${id}/play`),
   
   like: (id: string) => api.post(`/songs/${id}/like`),
+
+  search: (query: string, params?: any) =>
+    api.get('/songs', { params: { search: query, ...params } }),
+
+  getRecommendations: (type: string, params?: any) =>
+    api.get('/user/recommendations', { params: { type, ...params } }),
 };
 
 // Playlists API
@@ -219,6 +225,9 @@ export const analyticsAPI = {
   getGenres: () => api.get('/analytics/genres'),
   
   getUserAnalytics: () => api.get('/analytics/users'),
+
+  getUserStats: (userId?: string, params?: any) =>
+    api.get('/history/stats', { params: { userId, ...params } }),
   
   getSongAnalytics: (songId: string) =>
     api.get(`/analytics/songs/${songId}`),

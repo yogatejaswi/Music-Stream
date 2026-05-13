@@ -23,7 +23,7 @@ export default function AudioVisualizer({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationRef = useRef<number>();
   const analyserRef = useRef<AnalyserNode | null>(null);
-  const dataArrayRef = useRef<Uint8Array | null>(null);
+  const dataArrayRef = useRef<Uint8Array<ArrayBuffer> | null>(null);
   const { isPlaying, audioRef } = usePlayerStore();
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
 
@@ -50,7 +50,7 @@ export default function AudioVisualizer({
 
         // Create data array
         const bufferLength = analyser.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
+        const dataArray = new Uint8Array(bufferLength) as Uint8Array<ArrayBuffer>;
 
         setAudioContext(context);
         analyserRef.current = analyser;
@@ -124,7 +124,7 @@ export default function AudioVisualizer({
     };
   }, [isPlaying, width, height, barColor, backgroundColor, style]);
 
-  const drawBars = (ctx: CanvasRenderingContext2D, dataArray: Uint8Array) => {
+  const drawBars = (ctx: CanvasRenderingContext2D, dataArray: Uint8Array<ArrayBuffer>) => {
     const barWidth = width / barCount;
     let x = 0;
 
@@ -143,7 +143,7 @@ export default function AudioVisualizer({
     }
   };
 
-  const drawWave = (ctx: CanvasRenderingContext2D, dataArray: Uint8Array) => {
+  const drawWave = (ctx: CanvasRenderingContext2D, dataArray: Uint8Array<ArrayBuffer>) => {
     ctx.lineWidth = 2;
     ctx.strokeStyle = barColor;
     ctx.beginPath();
@@ -168,7 +168,7 @@ export default function AudioVisualizer({
     ctx.stroke();
   };
 
-  const drawCircle = (ctx: CanvasRenderingContext2D, dataArray: Uint8Array) => {
+  const drawCircle = (ctx: CanvasRenderingContext2D, dataArray: Uint8Array<ArrayBuffer>) => {
     const centerX = width / 2;
     const centerY = height / 2;
     const radius = Math.min(width, height) / 4;

@@ -126,7 +126,7 @@ export default function SearchPage() {
       }
 
       if (foundSongs.length === 0) {
-        toast.info('No songs found matching your search');
+        toast('No songs found matching your search');
       }
     } catch (error: any) {
       console.error('Search error:', error);

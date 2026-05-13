@@ -157,7 +157,7 @@ export default function PlaylistsPage() {
                     onClick={(e) => {
                       e.preventDefault();
                       // Play playlist
-                      toast.info('Playing playlist');
+                      toast('Playing playlist');
                     }}
                     className="p-2 bg-primary-500 rounded-full hover:bg-primary-600 transition"
                   >
