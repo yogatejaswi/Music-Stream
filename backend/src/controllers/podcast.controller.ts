@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { SortOrder } from 'mongoose';
 import Podcast from '../models/Podcast';
 import Episode from '../models/Episode';
 
@@ -24,10 +25,14 @@ export const getPodcasts = async (req: Request, res: Response) => {
       query.$text = { $search: search as string };
     }
 
+    const sort: Record<string, SortOrder> = {
+      [sortBy as string]: sortOrder === 'desc' ? -1 : 1
+    };
+
     const options = {
       page: parseInt(page as string),
       limit: parseInt(limit as string),
-      sort: { [sortBy as string]: sortOrder === 'desc' ? -1 : 1 }
+      sort
     };
 
     const podcasts = await Podcast.find(query)
@@ -108,10 +113,14 @@ export const getPodcastEpisodes = async (req: Request, res: Response) => {
     const query: any = { podcastId: id };
     if (season) query.season = parseInt(season as string);
 
+    const sort: Record<string, SortOrder> = {
+      [sortBy as string]: sortOrder === 'desc' ? -1 : 1
+    };
+
     const options = {
       page: parseInt(page as string),
       limit: parseInt(limit as string),
-      sort: { [sortBy as string]: sortOrder === 'desc' ? -1 : 1 }
+      sort
     };
 
     const episodes = await Episode.find(query)
@@ -176,7 +185,7 @@ export const getEpisodeById = async (req: Request, res: Response) => {
 export const subscribeToPodcast = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const userId = req.user?.id;
+    const userId = (req as any).user?.id;
 
     // In a real app, you'd have a UserPodcastSubscription model
     // For now, just increment the subscriber count
@@ -199,7 +208,7 @@ export const subscribeToPodcast = async (req: Request, res: Response) => {
 export const unsubscribeFromPodcast = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const userId = req.user?.id;
+    const userId = (req as any).user?.id;
 
     // Decrement subscriber count
     await Podcast.findByIdAndUpdate(id, { $inc: { subscribers: -1 } });
@@ -221,7 +230,7 @@ export const unsubscribeFromPodcast = async (req: Request, res: Response) => {
 export const likeEpisode = async (req: Request, res: Response) => {
   try {
     const { episodeId } = req.params;
-    const userId = req.user?.id;
+    const userId = (req as any).user?.id;
 
     // In a real app, you'd track individual user likes
     // For now, just increment the like count
