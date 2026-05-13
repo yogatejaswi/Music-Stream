@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FaRadio, FaPlay, FaPause, FaHeart, FaRegHeart, FaGlobe, FaMusic } from 'react-icons/fa';
+import { FaPlay, FaPause, FaHeart, FaRegHeart, FaGlobe, FaMusic, FaBroadcastTower } from 'react-icons/fa';
 import Image from 'next/image';
 
 interface RadioStation {
@@ -233,7 +233,7 @@ export default function RadioPage() {
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center space-x-3 mb-4">
-            <FaRadio className="text-primary-500" size={32} />
+            <FaBroadcastTower className="text-primary-500" size={32} />
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
                 Radio Stations
@@ -328,7 +328,7 @@ export default function RadioPage() {
         {/* Stations Grid */}
         {stations.length === 0 ? (
           <div className="text-center py-12">
-            <FaRadio className="mx-auto text-gray-400 mb-4" size={48} />
+            <FaBroadcastTower className="mx-auto text-gray-400 mb-4" size={48} />
             <p className="text-gray-600 dark:text-gray-400">
               No radio stations found matching your criteria
             </p>

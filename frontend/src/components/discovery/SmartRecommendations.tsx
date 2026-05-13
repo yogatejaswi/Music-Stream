@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { songsAPI } from '@/lib/api';
 import SongCard from '@/components/song/SongCard';
-import { FaRobot, FaRefresh, FaHeart, FaClock, FaMusic, FaChartLine } from 'react-icons/fa';
+import { FaRobot, FaSync, FaHeart, FaClock, FaMusic, FaChartLine } from 'react-icons/fa';
 
 interface Song {
   _id: string;
@@ -188,7 +188,7 @@ export default function SmartRecommendations() {
           disabled={refreshing}
           className="flex items-center space-x-2 px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors disabled:opacity-50"
         >
-          <FaRefresh className={refreshing ? 'animate-spin' : ''} />
+          <FaSync className={refreshing ? 'animate-spin' : ''} />
           <span>Refresh</span>
         </button>
       </div>
