@@ -1,11 +1,8 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from 'react-hot-toast';
 import ThemeProvider from '@/components/ThemeProvider';
 import KeyboardShortcuts from '@/components/KeyboardShortcuts';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Music Stream - Your Ultimate Music Experience',
@@ -93,7 +90,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="Music Stream" />
       </head>
-      <body className={inter.className} suppressHydrationWarning>
+      <body suppressHydrationWarning>
         <ThemeProvider>
           <KeyboardShortcuts />
           {children}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { Suspense, useState, useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { authAPI } from '@/lib/api';
@@ -9,7 +9,7 @@ import { useThemeStore } from '@/store/themeStore';
 import toast from 'react-hot-toast';
 import { FaMusic, FaArrowLeft, FaMoon, FaSun, FaEnvelope, FaRedo } from 'react-icons/fa';
 
-export default function VerifyOTPPage() {
+function VerifyOTPContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const setUser = useAuthStore(state => state.setUser);
@@ -279,5 +279,13 @@ export default function VerifyOTPPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function VerifyOTPPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 dark:bg-dark-300" />}>
+      <VerifyOTPContent />
+    </Suspense>
   );
 }

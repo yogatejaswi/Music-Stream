@@ -1,6 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  distDir: 'node_modules/.cache/next',
   images: {
     remotePatterns: [
       {
